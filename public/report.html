@@ -1,0 +1,300 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Report a lost or found belonging and help your campus community reunite with what matters.">
+
+    <title>Report an Item | REUNLY</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="report-premium.css">
+</head>
+
+<body class="report-page-body">
+
+    <!-- NAVIGATION -->
+    <header class="navbar">
+        <a href="index.html" class="logo">REUNLY<span>.</span></a>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="browse.html">Browse Items</a>
+            <a href="report.html" class="active">Report Item</a>
+            <a href="how-it-works.html">How It Works</a>
+        </nav>
+
+        <div class="nav-actions">
+            <a href="login.html" class="login-link">Log In</a>
+            <a href="register.html" class="nav-button">Get Started ↗</a>
+        </div>
+    </header>
+
+
+    <main class="report-page">
+
+        <!-- PAGE INTRO -->
+        <section class="report-heading">
+            <span class="eyebrow">A LITTLE HELP GOES A LONG WAY</span>
+
+            <h1>
+                Let's get it<br>
+                <span>back where it belongs.</span>
+            </h1>
+
+            <p>
+                Share a few details. Your campus community
+                can help make the reunion happen.
+            </p>
+        </section>
+
+
+        <!-- REPORT FORM -->
+        <section class="report-card">
+
+            <div class="report-card-heading">
+                <h2>Tell us about the item.</h2>
+                <p>Fields marked with * are required.</p>
+            </div>
+
+
+            <form id="report-form">
+
+                <!-- ITEM TYPE -->
+                <div class="form-group">
+
+                    <label>What would you like to report? *</label>
+
+                    <div class="report-type-options">
+
+                        <label class="report-type-option">
+
+                            <input
+                                type="radio"
+                                name="listing_type"
+                                value="lost"
+                                required
+                            >
+
+                            <span>
+                                <strong>I've lost something</strong>
+                                <small>Help me find my belongings</small>
+                            </span>
+
+                        </label>
+
+
+                        <label class="report-type-option">
+
+                            <input
+                                type="radio"
+                                name="listing_type"
+                                value="found"
+                                required
+                            >
+
+                            <span>
+                                <strong>I've found something</strong>
+                                <small>Help me return it to its owner</small>
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ITEM NAME -->
+                <div class="form-group">
+
+                    <label for="item-name">What is the item called? *</label>
+
+                    <input
+                        type="text"
+                        id="item-name"
+                        name="item_name"
+                        placeholder="Example: Black student wallet"
+                        maxlength="100"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- CATEGORY -->
+                <div class="form-group">
+
+                    <label for="category">Choose a category *</label>
+
+                    <select id="category" name="category" required>
+
+                        <option value="">Select a category</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Bags">Bags</option>
+                        <option value="Accessories">Accessories</option>
+                        <option value="Documents">Documents</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Books">Books</option>
+                        <option value="Keys">Keys</option>
+                        <option value="Other">Other</option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+                <div class="form-group">
+
+                    <label for="description">Describe the item *</label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="5"
+                        maxlength="1000"
+                        placeholder="Mention its colour, brand, appearance or any identifying details..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <!-- LOCATION -->
+                <div class="form-group">
+
+                    <label for="location">Where was it lost or found? *</label>
+
+                    <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        placeholder="Example: Library, Block A, Cafeteria"
+                        maxlength="150"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- DATE -->
+                <div class="form-group">
+
+                    <label for="item-date">When did it happen? *</label>
+
+                    <input
+                        type="date"
+                        id="item-date"
+                        name="item_date"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- IMAGE -->
+                <div class="form-group">
+
+                    <label for="item-image">Add an item photograph</label>
+
+                    <input
+                        type="file"
+                        id="item-image"
+                        name="image"
+                        accept="image/png,image/jpeg,image/webp"
+                    >
+
+                    <small class="field-hint">
+                        Optional · JPG, PNG or WebP · Maximum 5 MB
+                    </small>
+
+                </div>
+
+
+                <!-- IMAGE PREVIEW -->
+                <div id="image-preview-container" hidden>
+
+                    <img
+                        id="image-preview"
+                        alt="Selected item preview"
+                    >
+
+                </div>
+
+
+                <!-- MESSAGE -->
+                <p
+                    id="report-message"
+                    class="form-message"
+                    role="status"
+                ></p>
+
+
+                <!-- SUBMIT -->
+                <button
+                    type="submit"
+                    id="report-submit"
+                    class="submit-button"
+                >
+                    Submit your report →
+                </button>
+
+
+                <p class="form-footer-note">
+                    By submitting, you confirm that the information
+                    provided is accurate.
+                </p>
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+        <div class="footer-main">
+
+            <div class="footer-brand">
+                <a href="index.html" class="logo">REUNLY<span>.</span></a>
+                <p>
+                    Lost something? Let's reunite.<br>
+                    Made for a more connected campus.
+                </p>
+            </div>
+
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="browse.html">Browse Items</a>
+                <a href="report.html">Report Item</a>
+                <a href="how-it-works.html">How It Works</a>
+            </div>
+
+            <div class="footer-account">
+                <a href="login.html">Log In</a>
+                <a href="register.html">Create Account</a>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 REUNLY. Made for a better campus community.</p>
+            <span>LOST SOMETHING? LET'S REUNITE. ♡</span>
+        </div>
+
+    </footer>
+
+
+    <script src="report.js"></script>
+
+</body>
+</html>

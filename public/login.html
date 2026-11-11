@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | REUNLY</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">REUNLY<span>.</span></a>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="browse.html">Browse Items</a>
+            <a href="report.html">Report Item</a>
+            <a href="how-it-works.html">How It Works</a>
+        </nav>
+
+        <div class="nav-actions">
+            <a href="login.html" class="login-link active">Log In</a>
+            <a href="register.html" class="nav-button">Sign Up</a>
+        </div>
+    </header>
+
+    <main class="auth-page">
+        <section class="auth-card">
+
+            <div class="auth-brand-mark">R<span>.</span></div>
+
+            <span class="eyebrow">WELCOME BACK</span>
+            <h1>Good to see you <span>again.</span></h1>
+            <p class="auth-description">
+                Sign in to reconnect with your belongings and your campus community.
+            </p>
+
+            <form id="login-form">
+
+                <div class="form-group">
+                    <label for="email">University email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="you@university.edu"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+                <div class="forgot-password-row">
+    <a href="forgot-password.html">Forgot password?</a>
+</div>
+
+                <p id="login-message" class="form-message" role="status"></p>
+
+                <button type="submit" id="login-button" class="submit-button">
+                    Log In →
+                </button>
+
+            </form>
+
+            <p class="auth-switch">
+                Don't have an account?
+                <a href="register.html">Create one</a>
+            </p>
+
+            <a href="index.html" class="back-home">← Back to home</a>
+
+        </section>
+    </main>
+
+    <footer class="auth-footer">
+        © 2026 REUNLY. Lost something? Let's reunite.
+    </footer>
+
+    <script src="login.js"></script>
+</body>
+</html>

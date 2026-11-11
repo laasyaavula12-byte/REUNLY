@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>REUNLY | Dashboard</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dashboard.css">
+  <script src="dashboard.js" defer></script>
+</head>
+
+<body class="dashboard-page">
+
+<div class="reunly-dashboard">
+
+  <aside class="sidebar">
+    <a class="brand" href="index.html">
+      <span class="brand-title">REUNLY<span>.</span></span>
+      <span class="brand-caption">Campus Lost &amp; Found</span>
+    </a>
+
+    <nav class="side-nav">
+      <a class="side-link selected" href="#dashboard-top"><span class="side-icon">⌂</span>Dashboard</a>
+      <a class="side-link" href="#my-reports"><span class="side-icon">▤</span>My Reports</a>
+      <a class="side-link" href="#claims"><span class="side-icon">♧</span>Claims</a>
+      <a class="side-link" href="browse.html"><span class="side-icon">⬡</span>Found Items</a>
+      <a class="side-link" href="#found-responses"><span class="side-icon">▢</span>Messages</a>
+    </nav>
+
+    <div class="sidebar-campus">
+      <div class="campus-illustration">
+        <span class="campus-roof"></span>
+        <span class="campus-building"></span>
+        <span class="campus-columns"></span>
+      </div>
+      <p>Keep Our Campus<br>Connected.</p>
+      <span>Helping belongings find their way home.</span>
+      <div class="sidebar-leaves">❧</div>
+    </div>
+  </aside>
+
+  <main class="main-area" id="dashboard-top">
+
+    <header class="topbar">
+      <div class="topbar-spacer"></div>
+      <span class="topbar-note">A better way to reunite.</span>
+      <span class="topbar-bell">♧</span>
+
+      <div class="student-profile">
+    <div class="student-avatar" id="student-avatar">ST</div>
+
+    <div class="student-info">
+        <span id="student-name">Student</span>
+        <small>Student Account</small>
+    </div>
+
+    <i class="fa-solid fa-chevron-down profile-chevron"></i>
+</div>
+      <button type="button" id="logout-button" class="logout-button">
+        Log out
+      </button>
+    </header>
+
+    <section class="welcome-area">
+      <div>
+        <span class="overline">YOUR CAMPUS COMMUNITY</span>
+        <h1>Welcome back<span>!</span></h1>
+        <p>Here's what's happening with your campus listings.</p>
+      </div>
+
+      <a href="report.html" class="report-button">
+        <span>＋</span> Report an Item
+      </a>
+    </section>
+
+    <section class="summary-cards">
+
+      <a href="#my-reports" class="summary-card">
+        <span class="summary-icon">▤</span>
+        <span class="summary-text">
+          <small>My Reports</small>
+          <strong id="my-reports-count">0</strong>
+        </span>
+        <span class="summary-chevron">⌄</span>
+      </a>
+
+      <a href="#claims-received" class="summary-card">
+        <span class="summary-icon">♧</span>
+        <span class="summary-text">
+          <small>Claims Received</small>
+          <strong id="claims-received-count">0</strong>
+        </span>
+        <span class="summary-chevron">⌄</span>
+      </a>
+
+      <a href="#claims-submitted" class="summary-card">
+        <span class="summary-icon">◷</span>
+        <span class="summary-text">
+          <small>Responses Submitted</small>
+          <strong id="claims-submitted-count">0</strong>
+        </span>
+        <span class="summary-chevron">⌄</span>
+      </a>
+
+    </section>
+
+    <div class="dashboard-columns">
+
+      <section class="activity-card" id="activity">
+
+        <div class="activity-header">
+          <div>
+            <span class="overline">YOUR LATEST UPDATES</span>
+            <h2>Recent Activity</h2>
+            <p>Updates on your reports, claims, and responses.</p>
+          </div>
+
+          <a href="#found-responses" class="view-all">
+            View all activity →
+          </a>
+        </div>
+
+        <section class="activity-section" id="found-responses">
+          <div class="activity-section-title">
+            <span class="event-icon">▢</span>
+            <h3>Responses to your lost items</h3>
+          </div>
+
+          <div id="found-responses-container" class="activity-items">
+            <p class="loading-message">Loading found-item responses...</p>
+          </div>
+        </section>
+
+        <section class="activity-section" id="claims-received">
+          <div class="activity-section-title">
+            <span class="event-icon">♧</span>
+            <h3>Claims received</h3>
+          </div>
+
+          <div id="claims-received-container" class="activity-items">
+            <p class="loading-message">Loading received claims...</p>
+          </div>
+        </section>
+
+        <section class="activity-section" id="claims-submitted">
+          <div class="activity-section-title">
+            <span class="event-icon">◷</span>
+            <h3>Claims submitted</h3>
+          </div>
+
+          <div id="claims-submitted-container" class="activity-items">
+            <p class="loading-message">Loading submitted claims...</p>
+          </div>
+        </section>
+
+      </section>
+
+      <aside class="right-rail">
+
+        <section class="lost-promo">
+          <span class="promo-label">LET'S BRING IT BACK</span>
+
+          <h2>Lost something?</h2>
+
+          <p>
+            Report it now and let the REUNLY community help you find it.
+          </p>
+
+          <a href="report.html" class="promo-action">
+            Report an item →
+          </a>
+
+          <div class="promo-landscape">
+            <span class="sun"></span>
+            <span class="tree tree-a"></span>
+            <span class="tree tree-b"></span>
+            <span class="building"><i></i><i></i><i></i></span>
+            <span class="ground"></span>
+          </div>
+        </section>
+
+        <section class="help-tip">
+          <div class="tip-title">
+            <span class="tip-symbol">✧</span>
+            <h3>Tip</h3>
+          </div>
+
+          <p>
+            Add clear photos and mention where you last saw the item
+            to help others identify it faster.
+          </p>
+        </section>
+
+      </aside>
+
+    </div>
+
+    <section class="my-reports-panel" id="my-reports">
+
+      <div class="reports-title-row">
+        <div>
+          <span class="overline">YOUR LISTINGS</span>
+          <h2>My reported items</h2>
+          <p>Keep track of the items you've reported.</p>
+        </div>
+
+        <a href="report.html" class="view-all">＋ New report</a>
+      </div>
+
+      <div id="my-items-container" class="reports-grid">
+        <p class="loading-message">Loading your reports...</p>
+      </div>
+
+    </section>
+
+    <footer class="dashboard-footer">
+      <strong>REUNLY<span>.</span></strong>
+      <span>Lost something? Let's reunite.</span>
+      <a href="browse.html">Explore listings →</a>
+    </footer>
+
+  </main>
+</div>
+
+</body>
+</html>

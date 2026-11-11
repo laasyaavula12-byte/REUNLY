@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="REUNLY — Smart Campus Lost and Found Portal. Helping students reunite with their lost belongings.">
+    <title>REUNLY | Smart Campus Lost & Found</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+    <header class="navbar">
+        <a href="index.html" class="logo">REUNLY<span>.</span></a>
+
+        <nav class="nav-links">
+            <a href="index.html" class="active">Home</a>
+            <a href="browse.html">Browse Items</a>
+            <a href="report.html">Report Item</a>
+            <a href="how-it-works.html">How It Works</a>
+        </nav>
+
+        <div class="nav-actions">
+            <a href="login.html" class="login-link">Log In</a>
+            <a href="register.html" class="nav-button">Get Started</a>
+        </div>
+    </header>
+
+
+    <!-- HERO SECTION -->
+    <main>
+        <section class="hero">
+
+            <div class="hero-content">
+                <span class="eyebrow">YOUR CAMPUS. YOUR COMMUNITY.</span>
+
+                <h1>
+                    Lost something?
+                    <span>Let's reunite.</span>
+                </h1>
+
+                <p class="hero-description">
+                    A smarter way to find what matters.
+                    Report lost belongings, discover found items,
+                    and reconnect with your things — all in one place.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="browse.html" class="primary-button">
+                        Explore Items <span>→</span>
+                    </a>
+
+                    <a href="report.html" class="secondary-button">
+                        Report an Item
+                    </a>
+                </div>
+
+                <div class="hero-note">
+                    <span class="status-dot"></span>
+                    Built for a more connected campus community
+                </div>
+            </div>
+
+            <!-- HERO VISUAL -->
+            <div class="hero-visual">
+                <div class="visual-circle circle-one"></div>
+                <div class="visual-circle circle-two"></div>
+
+                <div class="floating-card card-top">
+                    <span class="card-icon">✦</span>
+                    <div>
+                        <strong>Lost something?</strong>
+                        <small>We'll help you find it.</small>
+                    </div>
+                </div>
+
+                <div class="hero-art">
+                    <div class="art-symbol">R</div>
+                    <div class="art-caption">
+                        <span>REUNITE</span>
+                        <strong>Find what matters.</strong>
+                    </div>
+                </div>
+
+                <div class="floating-card card-bottom">
+                    <span class="check-icon">✓</span>
+                    <div>
+                        <strong>Found it!</strong>
+                        <small>One less lost belonging.</small>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- QUICK ACTIONS -->
+        <section class="quick-actions">
+            <div class="section-heading">
+                <span class="eyebrow">GET STARTED</span>
+                <h2>What brings you here?</h2>
+                <p>Choose what you need. We'll take it from there.</p>
+            </div>
+
+            <div class="action-grid">
+
+                <a href="browse.html" class="action-card">
+                    <div class="action-icon">⌕</div>
+                    <h3>Find an Item</h3>
+                    <p>Browse items reported by your campus community.</p>
+                    <span class="action-link">Browse listings →</span>
+                </a>
+
+                <a href="report.html?type=lost" class="action-card">
+                    <div class="action-icon">↗</div>
+                    <h3>Report Lost</h3>
+                    <p>Tell the community what you've misplaced.</p>
+                    <span class="action-link">Report lost item →</span>
+                </a>
+
+                <a href="report.html?type=found" class="action-card">
+                    <div class="action-icon">✧</div>
+                    <h3>Report Found</h3>
+                    <p>Help someone get their belongings back.</p>
+                    <span class="action-link">Report found item →</span>
+                </a>
+
+            </div>
+        </section>
+
+
+        <!-- RECENT ITEMS -->
+        <section class="recent-section">
+            <div class="section-heading section-heading-row">
+                <div>
+                    <span class="eyebrow">CAMPUS COMMUNITY</span>
+                    <h2>Recently reported items</h2>
+                    <p>Take a look at what's been reported recently.</p>
+                </div>
+
+                <a href="browse.html" class="view-all-link">
+                    View all items →
+                </a>
+            </div>
+
+            <div class="items-container" id="items-container">
+                <p class="loading-message">Loading recent items...</p>
+            </div>
+
+            <div class="empty-state" id="empty-state" hidden>
+                <div class="empty-icon">⌕</div>
+                <h3>No items reported yet</h3>
+                <p>Be the first to help your campus community.</p>
+                <a href="report.html" class="primary-button">Report an Item →</a>
+            </div>
+        </section>
+
+
+        <!-- COMMUNITY BANNER -->
+        <section class="community-banner">
+            <div>
+                <span class="eyebrow">SMALL ACTIONS. BIG DIFFERENCE.</span>
+                <h2>One report could make someone's day.</h2>
+                <p>Join your campus community and help belongings find their way home.</p>
+            </div>
+
+            <a href="register.html" class="banner-button">
+                Join REUNLY →
+            </a>
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">REUNLY<span>.</span></a>
+                <p>Lost something? Let's reunite.</p>
+            </div>
+
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="browse.html">Browse Items</a>
+                <a href="report.html">Report Item</a>
+                <a href="how-it-works.html">How It Works</a>
+            </div>
+
+            <div class="footer-account">
+                <a href="login.html">Log In</a>
+                <a href="register.html">Create Account</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 REUNLY. Made for a better campus community.</p>
+            <span>Lost something? Let's reunite. ♡</span>
+        </div>
+    </footer>
+
+
+    <script src="main.js"></script>
+
+</body>
+</html>

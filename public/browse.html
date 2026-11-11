@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Discover lost and found belongings from your campus community on REUNLY.">
+
+    <title>Browse Items | REUNLY</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="browse-premium.css">
+</head>
+
+<body class="browse-page-body">
+
+    <!-- NAVIGATION -->
+    <header class="navbar">
+
+        <a href="index.html" class="logo">REUNLY<span>.</span></a>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="browse.html" class="active">Browse Items</a>
+            <a href="report.html">Report Item</a>
+            <a href="how-it-works.html">How It Works</a>
+        </nav>
+
+        <div class="nav-actions">
+            <a href="login.html" class="login-link">Log In</a>
+            <a href="register.html" class="nav-button">Get Started ↗</a>
+        </div>
+
+    </header>
+
+
+    <main class="browse-page">
+
+        <!-- PAGE INTRO -->
+        <section class="browse-heading">
+
+            <span class="eyebrow">THE CAMPUS COLLECTION · REUNLY</span>
+
+            <h1>
+                Find what you've<br>
+                <span>been missing.</span>
+            </h1>
+
+            <p>
+                Every item has a story. Explore belongings reported
+                by your campus community and help something find
+                its way home.
+            </p>
+
+        </section>
+
+
+        <!-- SEARCH AND FILTERS -->
+        <section class="browse-tools">
+
+            <div class="search-box">
+
+                <span aria-hidden="true">⌕</span>
+
+                <input
+                    type="search"
+                    id="browse-search"
+                    placeholder="What are you looking for?"
+                    aria-label="Search items"
+                >
+
+                <button id="search-button" type="button">
+                    Search →
+                </button>
+
+            </div>
+
+
+            <div class="filter-row">
+
+                <label for="category-filter">CATEGORY</label>
+
+                <select id="category-filter">
+                    <option value="">All categories</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Bags">Bags</option>
+                    <option value="Accessories">Accessories</option>
+                    <option value="Documents">Documents</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Books">Books</option>
+                    <option value="Other">Other</option>
+                </select>
+
+
+                <label for="type-filter">LISTING TYPE</label>
+
+                <select id="type-filter">
+                    <option value="">All listings</option>
+                    <option value="lost">Lost items</option>
+                    <option value="found">Found items</option>
+                </select>
+
+
+                <label for="location-filter">LOCATION</label>
+
+                <input
+                    type="text"
+                    id="location-filter"
+                    placeholder="Enter campus location"
+                    aria-label="Filter by location"
+                >
+
+            </div>
+
+        </section>
+
+
+        <!-- LISTINGS -->
+        <section class="browse-results">
+
+            <div class="results-heading">
+
+                <div>
+                    <span class="home-eyebrow">EXPLORE THE COMMUNITY</span>
+                    <h2>Available listings.</h2>
+                </div>
+
+                <span id="results-count">Loading...</span>
+
+            </div>
+
+
+            <div id="browse-items-container" class="items-container">
+
+                <p class="loading-message">
+                    Gathering campus listings...
+                </p>
+
+            </div>
+
+
+            <!-- EMPTY STATE -->
+            <div id="browse-empty-state" class="empty-state" hidden>
+
+                <div class="empty-icon">⌕</div>
+
+                <h3>Nothing here just yet.</h3>
+
+                <p>
+                    We couldn't find a match. Try another search
+                    or adjust your filters.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- CALL TO ACTION -->
+        <section class="browse-cta">
+
+            <div>
+                <span class="home-eyebrow">BE PART OF THE STORY</span>
+
+                <h2>Something missing?</h2>
+
+                <p>
+                    Let your campus community know.
+                    Your next report could lead to a happy reunion.
+                </p>
+            </div>
+
+            <a href="report.html" class="primary-button">
+                Report an Item →
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+        <div class="footer-main">
+
+            <div class="footer-brand">
+
+                <a href="index.html" class="logo">REUNLY<span>.</span></a>
+
+                <p>
+                    Lost something? Let's reunite.<br>
+                    Made for a more connected campus.
+                </p>
+
+            </div>
+
+
+            <div class="footer-links">
+
+                <a href="index.html">Home</a>
+                <a href="browse.html">Browse Items</a>
+                <a href="report.html">Report Item</a>
+                <a href="how-it-works.html">How It Works</a>
+
+            </div>
+
+
+            <div class="footer-account">
+
+                <a href="login.html">Log In</a>
+                <a href="register.html">Create Account</a>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <p>© 2026 REUNLY. Made for a better campus community.</p>
+
+            <span>LOST SOMETHING? LET'S REUNITE. ♡</span>
+
+        </div>
+
+    </footer>
+
+
+    <script src="browse.js"></script>
+
+</body>
+</html>
