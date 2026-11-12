@@ -1,5 +1,6 @@
 
 
+
 const API_URL = "/api";
 
 const accessToken = localStorage.getItem("reunly_access_token");
@@ -244,7 +245,6 @@ function renderClaims(container, claims, emptyMessage, allowActions = false) {
         const card = createDashboardCard(
             claim.items?.item_name || "Claim request",
             [
-                `Claimant: ${claim.claimant_id || "Student"}`,
                 `Message: ${claim.message || "No message provided"}`,
                 `Submitted: ${
                     claim.created_at
@@ -255,6 +255,7 @@ function renderClaims(container, claims, emptyMessage, allowActions = false) {
             claim.status
         );
 
+        // Approve and Reject buttons for claims received by the item owner
         if (allowActions && claim.status === "pending") {
             const actions = document.createElement("div");
             actions.className = "claim-actions";
@@ -279,6 +280,21 @@ function renderClaims(container, claims, emptyMessage, allowActions = false) {
 
             actions.append(approveButton, rejectButton);
             card.appendChild(actions);
+        }
+
+        // Show the item owner's contact button only to the approved claimant
+        if (!allowActions && claim.status === "approved") {
+            const contactButton = document.createElement("button");
+
+            contactButton.type = "button";
+            contactButton.className = "approve-claim-button";
+            contactButton.textContent = "View Owner Contact";
+
+            contactButton.addEventListener("click", () => {
+                loadClaimOwnerContact(claim.id, contactButton, card);
+            });
+
+            card.appendChild(contactButton);
         }
 
         container.appendChild(card);
@@ -661,6 +677,74 @@ document.addEventListener("DOMContentLoaded", () => {
         updateStudentAvatar();
     }
 });
+
+
+// ============================================
+// LOAD ITEM OWNER CONTACT DETAILS
+// ============================================
+
+async function loadClaimOwnerContact(claimId, button, card) {
+    button.disabled = true;
+    button.textContent = "Loading contact...";
+
+    try {
+        const response = await fetch(
+            `${API_URL}/claims/${encodeURIComponent(claimId)}/contact`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`
+                }
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(
+                result.message || "Could not load contact details."
+            );
+        }
+
+        const profile = result.contact;
+
+        const section = document.createElement("div");
+        section.className = "finder-profile";
+
+        const heading = document.createElement("h4");
+        heading.textContent = "Found Item Owner's Contact Details";
+        section.appendChild(heading);
+
+        const fields = [
+            ["Name", profile.full_name],
+            ["Email", profile.email],
+            ["Phone", profile.phone_number]
+        ];
+
+        fields.forEach(([label, value]) => {
+            const paragraph = document.createElement("p");
+
+            const strong = document.createElement("strong");
+            strong.textContent = `${label}: `;
+
+            const span = document.createElement("span");
+            span.textContent = value || "Not provided";
+
+            paragraph.append(strong, span);
+            section.appendChild(paragraph);
+        });
+
+        button.remove();
+        card.appendChild(section);
+
+    } catch (error) {
+        console.error("Owner contact error:", error);
+        alert(error.message);
+
+        button.disabled = false;
+        button.textContent = "View Owner Contact";
+    }
+}
+
 // ============================================
 // START DASHBOARD
 // ============================================
