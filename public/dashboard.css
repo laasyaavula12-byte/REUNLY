@@ -770,149 +770,8 @@ body.dashboard-page {
 
 /* RESPONSIVE */
 
-@media(max-width:1150px) {
-  .reunly-dashboard {
-    grid-template-columns: 230px minmax(0,1fr);
-  }
-
-  .main-area {
-    padding-left: 30px;
-    padding-right: 30px;
-  }
-
-  .dashboard-columns {
-    grid-template-columns: minmax(0,1.4fr) minmax(230px,.8fr);
-  }
-}
-
-@media(max-width:850px) {
-  .reunly-dashboard {
-    display: block;
-  }
-
-  .sidebar {
-    position: static;
-    height: auto;
-    min-height: 0;
-    padding: 17px 20px 12px;
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .brand {
-    padding: 0 2px 14px;
-    margin-bottom: 0;
-  }
-
-  .brand-title {
-    font-size: 24px;
-  }
-
-  .side-nav {
-    flex-direction: row;
-    overflow-x: auto;
-    gap: 6px;
-  }
-
-  .side-link {
-    min-height: 39px;
-    min-width: max-content;
-    padding: 0 11px;
-    font-size: 11px;
-  }
-
-  .sidebar-campus {
-    display: none;
-  }
-
-  .main-area {
-    padding: 0 24px 28px;
-  }
-
-  .dashboard-columns {
-    grid-template-columns: 1fr;
-  }
-
-  .right-rail {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media(max-width:560px) {
-  .main-area {
-    padding: 0 15px 22px;
-  }
-
-  .topbar {
-    height: 58px;
-    gap: 9px;
-  }
-
-  .topbar-note {
-    display: none;
-  }
-
-  .student-profile {
-    margin-left: auto;
-    font-size: 10px;
-  }
-
-  .welcome-area {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 28px 0 21px;
-  }
-
-  .welcome-area h1 {
-    font-size: 32px;
-  }
-
-  .summary-cards {
-    grid-template-columns: 1fr;
-    gap: 9px;
-  }
-
-  .summary-card {
-    min-height: 82px;
-  }
-
-  .activity-card,
-  .my-reports-panel {
-    padding: 18px 14px;
-  }
-
-  .activity-header h2,
-  .reports-title-row h2 {
-    font-size: 21px;
-  }
-
-  .right-rail {
-    grid-template-columns: 1fr;
-  }
-
-  .reports-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .activity-items .dashboard-list-card {
-    grid-template-columns: 1fr;
-  }
-
-  .dashboard-status {
-    grid-column: 1;
-    grid-row: auto;
-    justify-self: start;
-  }
-
-  .dashboard-footer {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
 /* =====================================
-   EXTRA SPACING — REUNLY DASHBOARD
+   EXTRA SPACING â€” REUNLY DASHBOARD
    ===================================== */
 
 .reunly-dashboard {
@@ -1093,31 +952,6 @@ body.dashboard-page {
     padding-top: 38px;
 }
 
-@media(max-width: 850px) {
-    .main-area {
-        padding: 0 24px 35px;
-    }
-
-    .welcome-area {
-        padding-top: 35px;
-        min-height: auto;
-    }
-}
-
-@media(max-width: 560px) {
-    .main-area {
-        padding: 0 15px 25px;
-    }
-
-    .welcome-area h1 {
-        font-size: 34px;
-    }
-
-    .activity-card,
-    .my-reports-panel {
-        padding: 20px 15px;
-    }
-}
 /* Student Profile */
 .student-profile {
     display: flex;
@@ -1166,4 +1000,456 @@ body.dashboard-page {
     margin-left: auto;
     color: #89928c;
     font-size: 11px;
+}
+
+/* =====================================
+   DASHBOARD PAGE RESET
+   Prevent global style.css dashboard
+   padding from squeezing this layout.
+===================================== */
+
+html,
+body.dashboard-page {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+body.dashboard-page {
+    min-height: 100vh;
+}
+
+.reunly-dashboard,
+.main-area,
+.dashboard-columns,
+.activity-card,
+.right-rail,
+.my-reports-panel {
+    min-width: 0;
+}
+
+img,
+svg {
+    max-width: 100%;
+}
+
+/* =====================================
+   RESPONSIVE DASHBOARD
+===================================== */
+
+@media (max-width: 1150px) {
+    .reunly-dashboard {
+        grid-template-columns: 230px minmax(0, 1fr);
+    }
+
+    .main-area {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .dashboard-columns {
+        grid-template-columns: minmax(0, 1.4fr) minmax(230px, 0.8fr);
+    }
+}
+
+@media (max-width: 850px) {
+    .reunly-dashboard {
+        display: block;
+        width: 100%;
+    }
+
+    .sidebar {
+        position: relative;
+        top: auto;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        padding: 18px 22px 12px;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+        padding: 0 2px 14px;
+        margin: 0;
+    }
+
+    .brand-title {
+        font-size: 25px;
+    }
+
+    .side-nav {
+        display: flex;
+        flex-direction: row;
+        gap: 7px;
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 2px 0 7px;
+        scrollbar-width: thin;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .side-link {
+        flex: 0 0 auto;
+        min-width: max-content;
+        min-height: 42px;
+        padding: 0 12px;
+        white-space: nowrap;
+        font-size: 11px;
+    }
+
+    .sidebar-campus {
+        display: none;
+    }
+
+    .main-area {
+        width: 100%;
+        max-width: none;
+        padding: 0 24px 35px;
+    }
+
+    .dashboard-columns {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+
+    .right-rail {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .lost-promo,
+    .help-tip {
+        min-width: 0;
+        height: 100%;
+    }
+
+    .lost-promo {
+        min-height: 280px;
+    }
+
+    .help-tip {
+        min-height: 180px;
+    }
+
+    .summary-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .summary-card:last-child {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 600px) {
+    .sidebar {
+        padding: 15px 15px 9px;
+    }
+
+    .brand-title {
+        font-size: 23px;
+    }
+
+    .brand-caption {
+        font-size: 10px;
+    }
+
+    .side-nav {
+        gap: 5px;
+    }
+
+    .side-link {
+        min-height: 39px;
+        padding: 0 10px;
+        gap: 7px;
+        font-size: 10px;
+    }
+
+    .side-icon {
+        width: auto;
+        font-size: 16px;
+    }
+
+    .main-area {
+        padding: 0 15px 25px;
+    }
+
+    .topbar {
+        min-height: 66px;
+        height: auto;
+        padding: 10px 0;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .topbar-spacer,
+    .topbar-note,
+    .topbar-bell {
+        display: none;
+    }
+
+    .student-profile {
+        min-width: 0;
+        max-width: calc(100% - 65px);
+        margin-left: 0;
+        padding: 7px 10px;
+        gap: 9px;
+        flex: 1 1 auto;
+    }
+
+    .student-avatar {
+        width: 38px;
+        height: 38px;
+    }
+
+    .student-info {
+        min-width: 0;
+    }
+
+    .student-info #student-name {
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 12px;
+    }
+
+    .student-info small {
+        font-size: 10px;
+    }
+
+    .profile-chevron {
+        display: none;
+    }
+
+    .logout-button {
+        flex: 0 0 auto;
+        padding: 8px 0 8px 5px;
+        font-size: 11px;
+    }
+
+    .welcome-area {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+        padding: 30px 0 22px;
+        min-height: 0;
+    }
+
+    .welcome-area h1 {
+        font-size: clamp(31px, 8vw, 37px);
+    }
+
+    .welcome-area p {
+        max-width: 34ch;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .report-button {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 16px;
+    }
+
+    .summary-cards {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 11px;
+        margin-bottom: 20px;
+    }
+
+    .summary-card,
+    .summary-card:last-child {
+        grid-column: auto;
+        min-height: 88px;
+        padding: 17px;
+        gap: 14px;
+    }
+
+    .summary-icon {
+        width: 45px;
+        height: 45px;
+        flex-basis: 45px;
+    }
+
+    .summary-text small {
+        font-size: 11px;
+    }
+
+    .summary-text strong {
+        font-size: 27px;
+    }
+
+    .dashboard-columns {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+    }
+
+    .activity-card,
+    .my-reports-panel {
+        width: 100%;
+        padding: 20px 16px;
+        border-radius: 13px;
+    }
+
+    .activity-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .activity-header h2,
+    .reports-title-row h2 {
+        font-size: 22px;
+        line-height: 1.2;
+    }
+
+    .activity-header p,
+    .reports-title-row p {
+        font-size: 11px;
+        line-height: 1.6;
+    }
+
+    .activity-section {
+        padding: 16px 0;
+    }
+
+    .activity-section-title {
+        align-items: flex-start;
+    }
+
+    .activity-section-title h3 {
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .activity-items .dashboard-list-card {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 7px;
+        padding: 13px;
+    }
+
+    .dashboard-list-card h3,
+    .dashboard-list-card p {
+        grid-column: 1;
+        overflow-wrap: anywhere;
+    }
+
+    .dashboard-status {
+        grid-column: 1;
+        grid-row: auto;
+        justify-self: start;
+    }
+
+    .claim-actions {
+        flex-wrap: wrap;
+    }
+
+    .right-rail {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+    }
+
+    .lost-promo {
+        min-height: 290px;
+        padding: 24px;
+    }
+
+    .lost-promo h2 {
+        max-width: 12ch;
+        font-size: 30px;
+        margin-top: 23px;
+    }
+
+    .lost-promo p {
+        max-width: 29ch;
+        font-size: 11px;
+        line-height: 1.7;
+    }
+
+    .promo-action {
+        margin-top: 19px;
+        padding: 12px 14px;
+        font-size: 11px;
+    }
+
+    .promo-landscape {
+        width: 135px;
+        height: 95px;
+    }
+
+    .help-tip {
+        min-height: 0;
+        padding: 20px;
+    }
+
+    .help-tip p {
+        font-size: 11px;
+        line-height: 1.8;
+    }
+
+    .my-reports-panel {
+        margin-top: 17px;
+    }
+
+    .reports-title-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .reports-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 11px;
+    }
+
+    .reports-grid .dashboard-list-card {
+        padding: 15px;
+    }
+
+    .dashboard-footer {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 25px 3px 5px;
+        line-height: 1.5;
+    }
+}
+
+@media (max-width: 360px) {
+    .main-area {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .student-profile {
+        padding: 6px 8px;
+        gap: 7px;
+    }
+
+    .student-avatar {
+        width: 34px;
+        height: 34px;
+        font-size: 12px;
+    }
+
+    .logout-button {
+        font-size: 10px;
+    }
+
+    .activity-card,
+    .my-reports-panel {
+        padding: 17px 13px;
+    }
 }
