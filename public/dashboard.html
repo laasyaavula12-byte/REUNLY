@@ -19,6 +19,7 @@
 
 <div class="reunly-dashboard">
 
+  <!-- SIDEBAR -->
   <aside class="sidebar">
     <a class="brand" href="index.html">
       <span class="brand-title">REUNLY<span>.</span></span>
@@ -45,28 +46,92 @@
     </div>
   </aside>
 
+  <!-- MAIN DASHBOARD -->
   <main class="main-area" id="dashboard-top">
 
+    <!-- HEADER -->
     <header class="topbar">
       <div class="topbar-spacer"></div>
       <span class="topbar-note">A better way to reunite.</span>
-      <span class="topbar-bell">♧</span>
 
+      <!-- NOTIFICATION BELL -->
+      <div class="notification-wrapper">
+
+        <button
+          type="button"
+          class="notification-bell"
+          id="notification-bell"
+          aria-label="Open notifications"
+          aria-expanded="false"
+        >
+          <span class="bell-icon">♧</span>
+          <span
+            class="notification-count"
+            id="notification-count"
+            hidden
+          >0</span>
+        </button>
+
+        <!-- NOTIFICATION DROPDOWN -->
+        <div
+          class="notification-dropdown"
+          id="notification-dropdown"
+          hidden
+        >
+
+          <div class="notification-header">
+            <div>
+              <h3>Notifications</h3>
+              <p id="notification-subtitle">Stay updated with REUNLY</p>
+            </div>
+
+            <button
+              type="button"
+              id="mark-all-read"
+              class="mark-all-read"
+            >
+              Mark all as read
+            </button>
+          </div>
+
+          <div
+            class="notification-list"
+            id="notification-list"
+          >
+            <p class="loading-message">
+              Loading notifications...
+            </p>
+          </div>
+
+          <div class="notification-footer">
+            <span>REUNLY · Campus updates</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- STUDENT PROFILE -->
       <div class="student-profile">
-    <div class="student-avatar" id="student-avatar">ST</div>
+        <div class="student-avatar" id="student-avatar">ST</div>
 
-    <div class="student-info">
-        <span id="student-name">Student</span>
-        <small>Student Account</small>
-    </div>
+        <div class="student-info">
+          <span id="student-name">Student</span>
+          <small>Student Account</small>
+        </div>
 
-    <i class="fa-solid fa-chevron-down profile-chevron"></i>
-</div>
-      <button type="button" id="logout-button" class="logout-button">
+        <i class="fa-solid fa-chevron-down profile-chevron"></i>
+      </div>
+
+      <button
+        type="button"
+        id="logout-button"
+        class="logout-button"
+      >
         Log out
       </button>
     </header>
 
+    <!-- WELCOME -->
     <section class="welcome-area">
       <div>
         <span class="overline">YOUR CAMPUS COMMUNITY</span>
@@ -79,6 +144,7 @@
       </a>
     </section>
 
+    <!-- SUMMARY CARDS -->
     <section class="summary-cards">
 
       <a href="#my-reports" class="summary-card">
@@ -110,6 +176,7 @@
 
     </section>
 
+    <!-- DASHBOARD CONTENT -->
     <div class="dashboard-columns">
 
       <section class="activity-card" id="activity">
@@ -126,6 +193,7 @@
           </a>
         </div>
 
+        <!-- FOUND RESPONSES -->
         <section class="activity-section" id="found-responses">
           <div class="activity-section-title">
             <span class="event-icon">▢</span>
@@ -133,10 +201,13 @@
           </div>
 
           <div id="found-responses-container" class="activity-items">
-            <p class="loading-message">Loading found-item responses...</p>
+            <p class="loading-message">
+              Loading found-item responses...
+            </p>
           </div>
         </section>
 
+        <!-- RECEIVED CLAIMS -->
         <section class="activity-section" id="claims-received">
           <div class="activity-section-title">
             <span class="event-icon">♧</span>
@@ -144,10 +215,13 @@
           </div>
 
           <div id="claims-received-container" class="activity-items">
-            <p class="loading-message">Loading received claims...</p>
+            <p class="loading-message">
+              Loading received claims...
+            </p>
           </div>
         </section>
 
+        <!-- SUBMITTED CLAIMS -->
         <section class="activity-section" id="claims-submitted">
           <div class="activity-section-title">
             <span class="event-icon">◷</span>
@@ -155,12 +229,15 @@
           </div>
 
           <div id="claims-submitted-container" class="activity-items">
-            <p class="loading-message">Loading submitted claims...</p>
+            <p class="loading-message">
+              Loading submitted claims...
+            </p>
           </div>
         </section>
 
       </section>
 
+      <!-- RIGHT RAIL -->
       <aside class="right-rail">
 
         <section class="lost-promo">
@@ -201,6 +278,7 @@
 
     </div>
 
+    <!-- MY REPORTED ITEMS -->
     <section class="my-reports-panel" id="my-reports">
 
       <div class="reports-title-row">
@@ -219,6 +297,7 @@
 
     </section>
 
+    <!-- FOOTER -->
     <footer class="dashboard-footer">
       <strong>REUNLY<span>.</span></strong>
       <span>Lost something? Let's reunite.</span>

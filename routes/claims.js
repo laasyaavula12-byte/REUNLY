@@ -5,23 +5,67 @@ const router = express.Router();
 const { createClient } = require("@supabase/supabase-js");
 const authenticateUser = require("../middleware/auth");
 
-// Create a Supabase client using the logged-in user's token
+// ============================================
+// SUPABASE CLIENTS
+// ============================================
+
+// Logged-in user's Supabase client
 function getUserSupabase(token) {
-  return createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_PUBLISHABLE_KEY,
-    {
-      global: {
-        headers: {
-          Authorization: `Bearer ${token}`
+    return createClient(
+        process.env.SUPABASE_URL,
+        process.env.SUPABASE_PUBLISHABLE_KEY,
+        {
+            global: {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            },
+            auth: {
+                persistSession: false,
+                autoRefreshToken: false
+            }
         }
-      },
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false
-      }
+    );
+}
+
+// Server-side admin client
+function getAdminSupabase() {
+    return createClient(
+        process.env.SUPABASE_URL,
+        process.env.SUPABASE_SECRET_KEY,
+        {
+            auth: {
+                persistSession: false,
+                autoRefreshToken: false
+            }
+        }
+    );
+}
+
+// ============================================
+// CREATE NOTIFICATION
+// ============================================
+
+async function createNotification(userId, title, message) {
+    try {
+        const adminSupabase = getAdminSupabase();
+
+        const { error } = await adminSupabase
+            .from("notifications")
+            .insert({
+                user_id: userId,
+                title,
+                message,
+                is_read: false
+            });
+
+        if (error) {
+            console.error("Notification insert error:", error.message);
+        }
+
+    } catch (error) {
+        console.error("Create notification error:", error.message);
     }
-  );
 }
 
 // ============================================
@@ -29,75 +73,82 @@ function getUserSupabase(token) {
 // ============================================
 
 router.post("/", authenticateUser, async (req, res) => {
-  try {
-    const { item_id, message } = req.body;
+    try {
+        const { item_id, message } = req.body;
 
-    if (
-      !item_id ||
-      typeof message !== "string" ||
-      !message.trim()
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Item ID and claim message are required."
-      });
+        if (
+            !item_id ||
+            typeof message !== "string" ||
+            !message.trim()
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: "Item ID and claim message are required."
+            });
+        }
+
+        const supabase = getUserSupabase(req.accessToken);
+
+        // Check whether the item exists and is active
+        const { data: item, error: itemError } = await supabase
+            .from("items")
+            .select("id, user_id, item_name, status")
+            .eq("id", item_id)
+            .eq("status", "active")
+            .maybeSingle();
+
+        if (itemError) throw itemError;
+
+        if (!item) {
+            return res.status(404).json({
+                success: false,
+                message: "Item not found or no longer active."
+            });
+        }
+
+        // Prevent users from claiming their own items
+        if (item.user_id === req.user.id) {
+            return res.status(403).json({
+                success: false,
+                message: "You cannot claim your own item."
+            });
+        }
+
+        // Insert the claim as pending
+        const { data, error } = await supabase
+            .from("claims")
+            .insert({
+                item_id,
+                claimant_id: req.user.id,
+                message: message.trim(),
+                status: "pending"
+            })
+            .select()
+            .single();
+
+        if (error) throw error;
+
+        // Notify the item owner
+        await createNotification(
+            item.user_id,
+            "New claim received",
+            `Someone has submitted a claim for your item "${item.item_name}". Open your dashboard to review it.`
+        );
+
+        return res.status(201).json({
+            success: true,
+            message: "Your claim has been submitted!",
+            claim: data
+        });
+
+    } catch (error) {
+        console.error("Submit claim error:", error.message);
+
+        return res.status(500).json({
+            success: false,
+            message: "Could not submit your claim."
+        });
     }
-
-    const supabase = getUserSupabase(req.accessToken);
-
-    // Check whether the item exists and is active
-    const { data: item, error: itemError } = await supabase
-      .from("items")
-      .select("id, user_id, status")
-      .eq("id", item_id)
-      .eq("status", "active")
-      .maybeSingle();
-
-    if (itemError) throw itemError;
-
-    if (!item) {
-      return res.status(404).json({
-        success: false,
-        message: "Item not found or no longer active."
-      });
-    }
-
-    // Prevent users from claiming their own items
-    if (item.user_id === req.user.id) {
-      return res.status(403).json({
-        success: false,
-        message: "You cannot claim your own item."
-      });
-    }
-
-    // Insert the claim as pending
-    const { data, error } = await supabase
-      .from("claims")
-      .insert({
-        item_id,
-        claimant_id: req.user.id,
-        message: message.trim(),
-        status: "pending"
-      })
-      .select()
-      .single();
-
-    if (error) throw error;
-
-    return res.status(201).json({
-      success: true,
-      message: "Your claim has been submitted!",
-      claim: data
-    });
-
-  } catch (error) {
-    console.error("Submit claim error:", error.message);
-
-    return res.status(500).json({
-      success: false,
-      message: "Could not submit your claim."
-    });
-  }
 });
 
 // ============================================
@@ -105,40 +156,40 @@ router.post("/", authenticateUser, async (req, res) => {
 // ============================================
 
 router.get("/received", authenticateUser, async (req, res) => {
-  try {
-    const supabase = getUserSupabase(req.accessToken);
+    try {
+        const supabase = getUserSupabase(req.accessToken);
 
-    const { data, error } = await supabase
-      .from("claims")
-      .select(`
-        *,
-        items!inner (
-          id,
-          item_name,
-          listing_type,
-          user_id,
-          status
-        )
-      `)
-      .eq("items.user_id", req.user.id)
-      .order("created_at", { ascending: false });
+        const { data, error } = await supabase
+            .from("claims")
+            .select(`
+                *,
+                items!inner (
+                    id,
+                    item_name,
+                    listing_type,
+                    user_id,
+                    status
+                )
+            `)
+            .eq("items.user_id", req.user.id)
+            .order("created_at", { ascending: false });
 
-    if (error) throw error;
+        if (error) throw error;
 
-    return res.status(200).json({
-      success: true,
-      count: data.length,
-      claims: data
-    });
+        return res.status(200).json({
+            success: true,
+            count: data.length,
+            claims: data
+        });
 
-  } catch (error) {
-    console.error("Fetch received claims error:", error.message);
+    } catch (error) {
+        console.error("Fetch received claims error:", error.message);
 
-    return res.status(500).json({
-      success: false,
-      message: "Could not retrieve claims."
-    });
-  }
+        return res.status(500).json({
+            success: false,
+            message: "Could not retrieve claims."
+        });
+    }
 });
 
 // ============================================
@@ -146,101 +197,133 @@ router.get("/received", authenticateUser, async (req, res) => {
 // ============================================
 
 router.patch("/:claimId", authenticateUser, async (req, res) => {
-  try {
-    const { status } = req.body;
-    const { claimId } = req.params;
+    try {
+        const { status } = req.body;
+        const { claimId } = req.params;
 
-    if (!["approved", "rejected"].includes(status)) {
-      return res.status(400).json({
-        success: false,
-        message: "Status must be approved or rejected."
-      });
-    }
-
-    const supabase = getUserSupabase(req.accessToken);
-
-    // APPROVE: Call the atomic PostgreSQL function
-    if (status === "approved") {
-      const { data, error } = await supabase.rpc(
-        "approve_item_claim",
-        {
-          p_claim_id: claimId
+        if (!["approved", "rejected"].includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: "Status must be approved or rejected."
+            });
         }
-      );
 
-      if (error) {
-        console.error("Approve claim error:", error.message);
+        const supabase = getUserSupabase(req.accessToken);
+        const adminSupabase = getAdminSupabase();
 
-        return res.status(400).json({
-          success: false,
-          message: error.message
+        // Get claim information for the notification
+        const { data: existingClaim, error: existingClaimError } =
+            await adminSupabase
+                .from("claims")
+                .select("id, item_id, claimant_id")
+                .eq("id", claimId)
+                .maybeSingle();
+
+        if (existingClaimError) throw existingClaimError;
+
+        if (!existingClaim) {
+            return res.status(404).json({
+                success: false,
+                message: "Claim not found."
+            });
+        }
+
+        // Get item name
+        const { data: item, error: itemError } = await adminSupabase
+            .from("items")
+            .select("item_name")
+            .eq("id", existingClaim.item_id)
+            .maybeSingle();
+
+        if (itemError) throw itemError;
+
+        const itemName = item?.item_name || "your reported item";
+
+        // APPROVE: Call the atomic PostgreSQL function
+        if (status === "approved") {
+            const { data, error } = await supabase.rpc(
+                "approve_item_claim",
+                {
+                    p_claim_id: claimId
+                }
+            );
+
+            if (error) {
+                console.error("Approve claim error:", error.message);
+
+                return res.status(400).json({
+                    success: false,
+                    message: error.message
+                });
+            }
+
+            // Notify the claimant
+            await createNotification(
+                existingClaim.claimant_id,
+                "Claim approved!",
+                `Your claim for "${itemName}" has been approved. You can now view the owner's contact details from your dashboard.`
+            );
+
+            return res.status(200).json({
+                success: true,
+                message: "Claim approved! Item marked as claimed.",
+                result: data
+            });
+        }
+
+        // REJECT: Update only a pending claim
+        // RLS ensures only the item owner or authorized admin can do this.
+        const { data, error } = await supabase
+            .from("claims")
+            .update({ status: "rejected" })
+            .eq("id", claimId)
+            .eq("status", "pending")
+            .select()
+            .maybeSingle();
+
+        if (error) throw error;
+
+        if (!data) {
+            return res.status(404).json({
+                success: false,
+                message:
+                    "Claim not found, already reviewed, or you are not authorized."
+            });
+        }
+
+        // Notify the claimant
+        await createNotification(
+            data.claimant_id,
+            "Claim update",
+            `Your claim for "${itemName}" was not approved. You can continue browsing other available items.`
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: "Claim rejected. The item remains available.",
+            claim: data
         });
-      }
 
-      return res.status(200).json({
-        success: true,
-        message: "Claim approved! Item marked as claimed.",
-        result: data
-      });
+    } catch (error) {
+        console.error("Update claim error:", error.message);
+
+        return res.status(500).json({
+            success: false,
+            message: "Could not update the claim."
+        });
     }
-
-    // REJECT: Update only a pending claim
-    // RLS ensures only the item owner or authorized admin can do this.
-    const { data, error } = await supabase
-      .from("claims")
-      .update({ status: "rejected" })
-      .eq("id", claimId)
-      .eq("status", "pending")
-      .select()
-      .maybeSingle();
-
-    if (error) throw error;
-
-    if (!data) {
-      return res.status(404).json({
-        success: false,
-        message:
-          "Claim not found, already reviewed, or you are not authorized."
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      message: "Claim rejected. The item remains available.",
-      claim: data
-    });
-
-  } catch (error) {
-    console.error("Update claim error:", error.message);
-
-    return res.status(500).json({
-      success: false,
-      message: "Could not update the claim."
-    });
-  }
 });
 
-
 // ============================================
-// GET APPROVED CLAIM: ITEM OWNER CONTACT DETAILS
+// GET: APPROVED CLAIM - ITEM OWNER CONTACT
 // ============================================
 
 router.get("/:claimId/contact", authenticateUser, async (req, res) => {
     try {
-        const adminSupabase = createClient(
-            process.env.SUPABASE_URL,
-            process.env.SUPABASE_SECRET_KEY,
-            {
-                auth: {
-                    persistSession: false,
-                    autoRefreshToken: false
-                }
-            }
-        );
-
+        const adminSupabase = getAdminSupabase();
         const { claimId } = req.params;
 
-        // 1. Find the claim
+        // Find the claim
         const { data: claim, error: claimError } = await adminSupabase
             .from("claims")
             .select("id, item_id, claimant_id, status")
@@ -256,7 +339,7 @@ router.get("/:claimId/contact", authenticateUser, async (req, res) => {
             });
         }
 
-        // 2. Only the claimant can view these details
+        // Only the claimant can view these details
         if (claim.claimant_id !== req.user.id) {
             return res.status(403).json({
                 success: false,
@@ -264,15 +347,16 @@ router.get("/:claimId/contact", authenticateUser, async (req, res) => {
             });
         }
 
-        // 3. Contact details are available only after approval
+        // Contact details are available only after approval
         if (claim.status !== "approved") {
             return res.status(403).json({
                 success: false,
-                message: "Contact details are available only after your claim is approved."
+                message:
+                    "Contact details are available only after your claim is approved."
             });
         }
 
-        // 4. Find the owner of the reported item
+        // Find the owner of the reported item
         const { data: item, error: itemError } = await adminSupabase
             .from("items")
             .select("user_id")
@@ -288,7 +372,7 @@ router.get("/:claimId/contact", authenticateUser, async (req, res) => {
             });
         }
 
-        // 5. Retrieve only the owner's contact fields
+        // Retrieve only the owner's contact fields
         const { data: profile, error: profileError } = await adminSupabase
             .from("profiles")
             .select("full_name, email, phone_number")
@@ -318,6 +402,5 @@ router.get("/:claimId/contact", authenticateUser, async (req, res) => {
         });
     }
 });
-
 
 module.exports = router;

@@ -1453,3 +1453,223 @@ svg {
         padding: 17px 13px;
     }
 }
+/* ============================================
+   REUNLY NOTIFICATION SYSTEM
+============================================ */
+
+.notification-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.notification-bell {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    background: transparent;
+    color: #526c5b;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.notification-bell:hover {
+    background: #e9f0e7;
+    border-color: #dce8dc;
+}
+
+.bell-icon {
+    font-size: 23px;
+    line-height: 1;
+}
+
+.notification-count {
+    position: absolute;
+    top: 0;
+    right: -2px;
+    min-width: 19px;
+    height: 19px;
+    display: grid;
+    place-items: center;
+    padding: 0 5px;
+    border: 2px solid #f4f1e8;
+    border-radius: 20px;
+    background: #b94d3c;
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.notification-count[hidden] {
+    display: none !important;
+}
+
+.notification-dropdown[hidden] {
+    display: none !important;
+}
+
+.notification-dropdown {
+    position: absolute;
+    z-index: 1000;
+    top: calc(100% + 14px);
+    right: -75px;
+    width: 365px;
+    max-width: calc(100vw - 30px);
+    overflow: hidden;
+    border: 1px solid #e8e7de;
+    border-radius: 14px;
+    background: #fffefa;
+    box-shadow: 0 18px 50px rgba(31, 53, 39, .16);
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 19px;
+    border-bottom: 1px solid #eeece5;
+}
+
+.notification-header h3 {
+    margin: 0;
+    color: #293b30;
+    font: 600 19px "Playfair Display", serif;
+}
+
+.notification-header p {
+    margin: 5px 0 0;
+    color: #879188;
+    font-size: 10px;
+}
+
+.mark-all-read {
+    border: 0;
+    padding: 7px 0;
+    background: transparent;
+    color: #145b43;
+    font: 700 10px "DM Sans", sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.mark-all-read:hover {
+    color: #0d4935;
+    text-decoration: underline;
+}
+
+.mark-all-read:disabled {
+    opacity: .5;
+    cursor: wait;
+}
+
+.notification-list {
+    max-height: 360px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 15px 18px;
+    border: 0;
+    border-bottom: 1px solid #f0eee8;
+    background: #fffefa;
+    text-align: left;
+    cursor: pointer;
+    transition: background .2s ease;
+}
+
+.notification-item:hover {
+    background: #f6f7f1;
+}
+
+.notification-item.unread {
+    background: #f0f5ed;
+}
+
+.notification-item.unread:hover {
+    background: #e8f0e5;
+}
+
+.notification-content {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.notification-item-title {
+    color: #304238;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.notification-message {
+    color: #78847b;
+    font-size: 11px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.notification-date {
+    color: #a0a79f;
+    font-size: 9px;
+}
+
+.notification-dot {
+    flex: 0 0 auto;
+    color: #347b52;
+    font-size: 10px;
+}
+
+.notification-empty {
+    padding: 25px 18px;
+    color: #89938a;
+    font-size: 11px;
+    text-align: center;
+}
+
+.notification-footer {
+    padding: 12px 18px;
+    border-top: 1px solid #eeece5;
+    background: #faf9f4;
+    color: #929b92;
+    font-size: 9px;
+}
+
+/* MOBILE NOTIFICATIONS */
+
+@media (max-width: 560px) {
+    .notification-dropdown {
+        position: fixed;
+        top: 68px;
+        right: 12px;
+        width: 360px;
+        max-width: calc(100vw - 24px);
+    }
+
+    .notification-header {
+        padding: 15px;
+    }
+
+    .notification-item {
+        padding: 13px 15px;
+    }
+
+    .notification-bell {
+        width: 37px;
+        height: 37px;
+    }
+
+    .bell-icon {
+        font-size: 21px;
+    }
+}

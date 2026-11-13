@@ -746,7 +746,270 @@ async function loadClaimOwnerContact(claimId, button, card) {
 }
 
 // ============================================
+// REUNLY NOTIFICATION SYSTEM
+// ============================================
+
+function initializeNotifications() {
+    const bell = document.getElementById("notification-bell");
+    const countBadge = document.getElementById("notification-count");
+    const dropdown = document.getElementById("notification-dropdown");
+    const list = document.getElementById("notification-list");
+    const subtitle = document.getElementById("notification-subtitle");
+    const markAllButton = document.getElementById("mark-all-read");
+
+    if (!bell || !countBadge || !dropdown || !list || !markAllButton) {
+        console.error("Notification HTML elements are missing.");
+        return;
+    }
+
+    const authHeaders = {
+        "Authorization": `Bearer ${accessToken}`
+    };
+
+    function updateUnreadBadge(count) {
+        const unread = Number(count) || 0;
+
+        countBadge.textContent = unread > 99 ? "99+" : String(unread);
+        countBadge.hidden = unread === 0;
+
+        bell.setAttribute(
+            "aria-label",
+            unread > 0
+                ? `Open notifications, ${unread} unread`
+                : "Open notifications"
+        );
+
+        subtitle.textContent = unread > 0
+            ? `${unread} unread notification${unread === 1 ? "" : "s"}`
+            : "You're all caught up!";
+    }
+
+    function formatNotificationDate(dateValue) {
+        if (!dateValue) return "";
+
+        const date = new Date(dateValue);
+
+        if (Number.isNaN(date.getTime())) return "";
+
+        return date.toLocaleString([], {
+            dateStyle: "medium",
+            timeStyle: "short"
+        });
+    }
+
+    async function loadUnreadCount() {
+        try {
+            const response = await fetch(
+                `${API_URL}/notifications/unread-count`,
+                { headers: authHeaders }
+            );
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(
+                    result.message || "Could not load unread count."
+                );
+            }
+
+            updateUnreadBadge(result.unreadCount);
+
+        } catch (error) {
+            console.error("Unread notification count error:", error);
+        }
+    }
+
+    async function loadNotifications() {
+        list.innerHTML = "";
+
+        const loading = document.createElement("p");
+        loading.className = "loading-message";
+        loading.textContent = "Loading notifications...";
+        list.appendChild(loading);
+
+        try {
+            const response = await fetch(
+                `${API_URL}/notifications`,
+                { headers: authHeaders }
+            );
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(
+                    result.message || "Could not load notifications."
+                );
+            }
+
+            const notifications = result.notifications || [];
+
+            list.innerHTML = "";
+
+            if (notifications.length === 0) {
+                const empty = document.createElement("p");
+                empty.className = "notification-empty";
+                empty.textContent = "No notifications yet.";
+                list.appendChild(empty);
+                updateUnreadBadge(0);
+                return;
+            }
+
+            let unread = 0;
+
+            notifications.forEach(notification => {
+                if (!notification.is_read) unread++;
+
+                const item = document.createElement("button");
+                item.type = "button";
+                item.className = "notification-item";
+
+                if (!notification.is_read) {
+                    item.classList.add("unread");
+                }
+
+                const content = document.createElement("span");
+                content.className = "notification-content";
+
+                const title = document.createElement("strong");
+                title.className = "notification-item-title";
+                title.textContent = notification.title || "REUNLY update";
+
+                const message = document.createElement("span");
+                message.className = "notification-message";
+                message.textContent = notification.message || "";
+
+                const date = document.createElement("small");
+                date.className = "notification-date";
+                date.textContent = formatNotificationDate(
+                    notification.created_at
+                );
+
+                content.append(title, message, date);
+
+                const status = document.createElement("span");
+                status.className = "notification-dot";
+                status.textContent = notification.is_read ? "" : "●";
+                status.setAttribute("aria-hidden", "true");
+
+                item.append(content, status);
+
+                item.addEventListener("click", async () => {
+                    if (notification.is_read) return;
+
+                    item.disabled = true;
+
+                    try {
+                        const readResponse = await fetch(
+                            `${API_URL}/notifications/${encodeURIComponent(notification.id)}/read`,
+                            {
+                                method: "PATCH",
+                                headers: authHeaders
+                            }
+                        );
+
+                        const readResult = await readResponse.json();
+
+                        if (!readResponse.ok || !readResult.success) {
+                            throw new Error(
+                                readResult.message ||
+                                "Could not mark notification as read."
+                            );
+                        }
+
+                        await loadNotifications();
+                        await loadUnreadCount();
+
+                    } catch (error) {
+                        console.error("Mark notification read error:", error);
+                        item.disabled = false;
+                    }
+                });
+
+                list.appendChild(item);
+            });
+
+            updateUnreadBadge(unread);
+
+        } catch (error) {
+            console.error("Load notifications error:", error);
+
+            list.innerHTML = "";
+
+            const errorMessage = document.createElement("p");
+            errorMessage.className = "notification-empty";
+            errorMessage.textContent =
+                "Unable to load notifications. Please try again.";
+
+            list.appendChild(errorMessage);
+        }
+    }
+
+    // Open and close notification dropdown
+    bell.addEventListener("click", async () => {
+        const isOpening = dropdown.hidden;
+
+        dropdown.hidden = !isOpening;
+        bell.setAttribute("aria-expanded", String(isOpening));
+
+        if (isOpening) {
+            await loadNotifications();
+            await loadUnreadCount();
+        }
+    });
+
+    // Mark all notifications as read
+    markAllButton.addEventListener("click", async () => {
+        markAllButton.disabled = true;
+        markAllButton.textContent = "Updating...";
+
+        try {
+            const response = await fetch(
+                `${API_URL}/notifications/read-all`,
+                {
+                    method: "PATCH",
+                    headers: authHeaders
+                }
+            );
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(
+                    result.message || "Could not update notifications."
+                );
+            }
+
+            await loadNotifications();
+            await loadUnreadCount();
+
+        } catch (error) {
+            console.error("Mark all notifications read error:", error);
+            alert(error.message);
+
+        } finally {
+            markAllButton.disabled = false;
+            markAllButton.textContent = "Mark all as read";
+        }
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener("click", event => {
+        if (!event.target.closest(".notification-wrapper")) {
+            dropdown.hidden = true;
+            bell.setAttribute("aria-expanded", "false");
+        }
+    });
+
+    // Initial unread count
+    loadUnreadCount();
+
+    // Refresh unread count every 30 seconds
+    setInterval(loadUnreadCount, 30000);
+}
+
+// ============================================
 // START DASHBOARD
 // ============================================
 
 loadDashboard();
+initializeNotifications();
