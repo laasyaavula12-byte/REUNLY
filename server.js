@@ -15,6 +15,7 @@ const claimRoutes = require("./routes/claims");
 const dashboardRoutes = require("./routes/dashboard");
 const foundResponseRoutes = require("./routes/foundResponses");
 
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -32,6 +33,7 @@ app.use("/api/dashboard", dashboardRoutes);
 
 // NEW: Found-item responses
 app.use("/api/found-responses", foundResponseRoutes);
+
 
 // Server health check
 app.get("/api/health", (req, res) => {

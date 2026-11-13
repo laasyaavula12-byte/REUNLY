@@ -57,7 +57,20 @@ router.get("/", authenticateUser, async (req, res) => {
         const { data: submittedClaims, error: submittedError } =
             await supabase
                 .from("claims")
-                .select("id, item_id, claimant_id, message, status, created_at")
+            .select(`
+    id,
+    item_id,
+    claimant_id,
+    message,
+    status,
+    created_at,
+    items (
+        item_name,
+        location,
+        item_date,
+        image_url
+    )
+`)   
                 .eq("claimant_id", req.user.id)
                 .order("created_at", { ascending: false });
 
@@ -98,5 +111,7 @@ router.get("/", authenticateUser, async (req, res) => {
         });
     }
 });
+
+
 
 module.exports = router;

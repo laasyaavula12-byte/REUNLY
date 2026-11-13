@@ -220,4 +220,104 @@ router.patch("/:claimId", authenticateUser, async (req, res) => {
   }
 });
 
+
+// ============================================
+// GET APPROVED CLAIM: ITEM OWNER CONTACT DETAILS
+// ============================================
+
+router.get("/:claimId/contact", authenticateUser, async (req, res) => {
+    try {
+        const adminSupabase = createClient(
+            process.env.SUPABASE_URL,
+            process.env.SUPABASE_SECRET_KEY,
+            {
+                auth: {
+                    persistSession: false,
+                    autoRefreshToken: false
+                }
+            }
+        );
+
+        const { claimId } = req.params;
+
+        // 1. Find the claim
+        const { data: claim, error: claimError } = await adminSupabase
+            .from("claims")
+            .select("id, item_id, claimant_id, status")
+            .eq("id", claimId)
+            .maybeSingle();
+
+        if (claimError) throw claimError;
+
+        if (!claim) {
+            return res.status(404).json({
+                success: false,
+                message: "Claim not found."
+            });
+        }
+
+        // 2. Only the claimant can view these details
+        if (claim.claimant_id !== req.user.id) {
+            return res.status(403).json({
+                success: false,
+                message: "You are not authorized to view these details."
+            });
+        }
+
+        // 3. Contact details are available only after approval
+        if (claim.status !== "approved") {
+            return res.status(403).json({
+                success: false,
+                message: "Contact details are available only after your claim is approved."
+            });
+        }
+
+        // 4. Find the owner of the reported item
+        const { data: item, error: itemError } = await adminSupabase
+            .from("items")
+            .select("user_id")
+            .eq("id", claim.item_id)
+            .maybeSingle();
+
+        if (itemError) throw itemError;
+
+        if (!item) {
+            return res.status(404).json({
+                success: false,
+                message: "Item not found."
+            });
+        }
+
+        // 5. Retrieve only the owner's contact fields
+        const { data: profile, error: profileError } = await adminSupabase
+            .from("profiles")
+            .select("full_name, email, phone_number")
+            .eq("id", item.user_id)
+            .maybeSingle();
+
+        if (profileError) throw profileError;
+
+        if (!profile) {
+            return res.status(404).json({
+                success: false,
+                message: "Owner contact details are unavailable."
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            contact: profile
+        });
+
+    } catch (error) {
+        console.error("Claim contact error:", error.message);
+
+        return res.status(500).json({
+            success: false,
+            message: "Could not retrieve owner contact details."
+        });
+    }
+});
+
+
 module.exports = router;
